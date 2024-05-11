@@ -1,15 +1,24 @@
 package com.api.code.model.dto;
 
 import com.api.code.model.entities.Curso;
+import com.api.code.model.entities.Modulo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CursoDTO {
-    private UUID id;
+    private Long id;
+    @NotBlank(message = "Nome inválido.")
     private String nome;
+    @NotBlank(message = "Descrição inválida.")
     private String descricao;
+    @NotBlank(message = "Url inválido.")
     private String urlIcon;
-
+    @JsonIgnore
+    private List<ModuloDTO> modulos = new ArrayList<>();
     public CursoDTO() {
     }
 
@@ -18,14 +27,14 @@ public class CursoDTO {
         nome =  entity.getNome();
         descricao =  entity.getDescricao();
         urlIcon =  entity.getUrlIcon();
-//        entity.getModulos().forEach(item -> getModulos().add(new ModuloDTO(item)));
-    }
-
-    public UUID getId() {
+        modulos = entity.getModulos().stream()
+                .map(ModuloDTO::new)
+                .collect(Collectors.toList());    }
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,5 +62,11 @@ public class CursoDTO {
         this.urlIcon = urlIcon;
     }
 
+    public List<ModuloDTO> getModulos() {
+        return modulos;
+    }
 
+    public void setModulos(List<ModuloDTO> modulos) {
+        this.modulos = modulos;
+    }
 }

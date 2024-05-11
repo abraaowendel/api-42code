@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TB_AULA")
@@ -12,28 +11,33 @@ public class Aula implements Serializable {
     private static final long serialVersionUUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Long id;
     private String titulo;
     private String url;
     private boolean visto;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modulo_id")
+    private Modulo modulo;
 
     public Aula() {
     }
 
-    public Aula(UUID id, String titulo, String url, boolean visto) {
+    public Aula(Long id, String titulo, String url, boolean visto, Modulo modulo) {
         this.id = id;
         this.titulo = titulo;
         this.url = url;
         this.visto = visto;
+        this.modulo = modulo;
     }
 
-    public UUID getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -60,6 +64,13 @@ public class Aula implements Serializable {
     public void setVisto(boolean visto) {
         this.visto = visto;
     }
+    public Modulo getModulo() {
+        return modulo;
+    }
+
+    public void setModulo(Modulo modulo) {
+        this.modulo = modulo;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -73,4 +84,5 @@ public class Aula implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

@@ -2,14 +2,11 @@ package com.api.code.model.dto;
 
 import com.api.code.model.entities.Aula;
 
-import java.util.UUID;
-
 public class AulaDTO {
-    private UUID id;
+    private Long id;
     private String titulo;
     private String url;
     private boolean visto;
-
     public AulaDTO() {
     }
 
@@ -20,11 +17,11 @@ public class AulaDTO {
         visto = entity.isVisto();
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

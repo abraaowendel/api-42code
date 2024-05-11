@@ -3,8 +3,9 @@ package com.api.code.model.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Table(name = "TB_MODULO")
@@ -12,24 +13,32 @@ public class Modulo  implements Serializable {
     private static final long serialVersionUUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String nome;
 
-    public Modulo() {
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
 
-    public Modulo(UUID id, String nome) {
+    @OneToMany(mappedBy = "modulo", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Aula> aulas = new ArrayList<>();
+
+    public Modulo() {
+
+    }
+    public Modulo(Long id, String nome, Curso curso) {
         this.id = id;
         this.nome = nome;
+        this.curso = curso;
     }
-
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -41,6 +50,17 @@ public class Modulo  implements Serializable {
         this.nome = nome;
     }
 
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public List<Aula> getAulas() {
+        return aulas;
+    }
 
     @Override
     public boolean equals(Object o) {

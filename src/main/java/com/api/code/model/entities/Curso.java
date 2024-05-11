@@ -1,6 +1,9 @@
 package com.api.code.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,34 +11,45 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static jakarta.persistence.FetchType.EAGER;
+
 @Entity
 @Table(name = "TB_CURSO")
 public class Curso implements Serializable {
     private static final long serialVersionUUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
     private String descricao;
+
     private String urlIcon;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, fetch = EAGER)
+    @JsonIgnore
+    private List<Modulo> modulos = new ArrayList<>();
 
     public Curso() {
+
     }
 
-    public Curso(UUID id, String nome, String descricao, String urlIcon) {
+    public Curso(Long id, String nome, String descricao, String urlIcon, List<Modulo> modulos) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.urlIcon = urlIcon;
+        this.modulos = modulos != null ? modulos : new ArrayList<>();
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,7 +76,9 @@ public class Curso implements Serializable {
     public void setUrlIcon(String urlIcon) {
         this.urlIcon = urlIcon;
     }
-
+    public List<Modulo> getModulos() {
+        return modulos;
+    }
 
     @Override
     public boolean equals(Object o) {
